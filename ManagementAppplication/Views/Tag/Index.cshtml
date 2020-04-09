@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <style>
+        #divTag {
+            width: 100%;
+            border: solid 1px green;
+            text-align: center;
+        }
+    </style>
+
+<h1>TAG</h1>
+
+<div id="divTag">
+    @Html.Partial("_Create")
+</div>

@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <style>
+        li{
+            margin-bottom: 10px;
+        }
+    </style>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to Members Manager</h1>
+    <hr />
+    <div>
+        <ul style="list-style: none; padding-left: 0px;">
+            <li>
+                <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Create","Member")'" value="Register a Member" />
+            </li>
+            <li>
+                <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("ListMembers","Member")'" value="List All Members" />
+            </li>
+            <li>
+                <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("GetMembersByParam","Member")'" value="Search By Parameters" />
+            </li>
+            <li>
+                <input type="button" class="btn btn-primary" onclick="location.href='@Url.Action("Index","Tag")'" value="Create a Tag" />
+            </li>
+        </ul>        
+    </div>
+</div>

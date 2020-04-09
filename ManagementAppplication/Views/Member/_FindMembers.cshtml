@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Management.Business.Business.Member>
+@using Management.Business.Business;
+
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div>
+        <h4>Search Members</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="GetMembersByParam" method="get">
+                    <div class="form-group">
+                        <label class="control-label">Name</label>
+                        <input name="Name" class="form-control" />
+                    </div>
+                    <p>OR</p>
+                    <div class="form-group">
+                        <label>Tag</label>
+                        <select class="custom-select" name="TagId" id="TagId">
+                            <option selected="selected" value="">Select a tag</option>
+                            @foreach (var item in ViewBag.TagList)
+                            {
+                                <option value="@item.Id">@item.Description</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Filter" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        @if (Model != null)
+        {
+            <div class="table-responsive">
+                <table class="table table-striped" id="tableMembers">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.MemberType)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date_Register)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date_StartTerm)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Date_EndTerm)
+                            </th>
+                            <th>
+                                Role
+                            </th>
+                            <th>
+                                Tags
+                            </th>
+                            <th>
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.MemberType)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date_Register)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date_StartTerm)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Date_EndTerm)
+                                </td>
+                                <td>
+                                    @if (item.Role != null)
+                                    {
+                                        @item.Role.Description;
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.listTags != null && item.listTags.Count > 0)
+                                    {
+                                        @item.listTags.Aggregate((i, j) => new Tag { Description = (i.Description + "," + j.Description) }).Description
+                                    }
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p style="color: cornflowerblue; font-size:medium;">Does not contain records with the selected filter</p>
+        }
+    </div>

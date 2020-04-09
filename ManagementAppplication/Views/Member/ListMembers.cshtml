@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Management.Business.Business.Member>
+@using Management.Business.Business;
+
+@{
+    ViewData["Title"] = "ListMembers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #tableMembers tr th:last-child {
+        min-width: 110px;
+    }
+</style>
+
+<h1>List of Members</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create a New Member</a>
+</p>
+@if (TempData["UserDeleted"] != null)
+{
+    @if (TempData["UserDeleted"].ToString() == "Erro")
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Failed!</strong> Error to exclude member
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (TempData["UserDeleted"].ToString() == "Success")
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!!</strong> The member has been deleted
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+}
+<div class="table-responsive">
+    <table class="table table-striped" id="tableMembers">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.MemberType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date_Register)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date_StartTerm)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date_EndTerm)
+                </th>
+                <th>
+                    Role
+                </th>
+                <th>
+                    Tags
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.MemberType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_Register)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_StartTerm)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date_EndTerm)
+                    </td>
+                    <td>
+                        @if (item.Role != null)
+                        {
+                            @item.Role.Description;
+                        }
+                    </td>
+                    <td>
+                        @if (item.listTags != null && item.listTags.Count > 0)
+                        {
+                            @item.listTags.Aggregate((i, j) => new Tag { Description = (i.Description + "," + j.Description) }).Description
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", "Member", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "DeleteMember", "Member", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

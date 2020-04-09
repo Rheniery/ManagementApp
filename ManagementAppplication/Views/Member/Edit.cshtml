@@ -1,0 +1,124 @@
+﻿@model Management.Business.Business.Member
+@using Management.Business.Business;
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/js/edit.js"></script>
+
+@if (ViewData["Valida"] != null)
+{
+    @if (ViewData["Valida"].ToString() == "Erro")
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Failed!</strong> Something got wrong. Please, check the fields below.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    @if (ViewData["Valida"].ToString() == "Success")
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!!</strong> The member was edited.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+}
+
+
+<h1>Edit @Model.Name</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateMember">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date_Register" class="control-label"></label>
+                <input asp-for="Date_Register" asp-format="{0:yyyy-MM-dd}" class="form-control" disabled />
+                <span asp-validation-for="Date_Register" class="text-danger"></span>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                @Html.Label("MemberType", "Type of Member")
+                <select class="custom-select" asp-for="MemberType" asp-items="Html.GetEnumSelectList<EnumMemberType>()" disabled>
+                    <option value="">Please select</option>
+                </select>
+                <span asp-validation-for="MemberType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label style="display: block;">Tags</label>
+                <select class="selectpicker form-control" name="listTags" id="listTags" multiple>
+                    <option value="0">Please select the Tags</option>
+
+                    @foreach (var item in ViewBag.TagList)
+                    {
+                        if (Model.listTags.Contains(item))
+                        {
+                            <option selected="selected" value="@item.Id">@item.Description</option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id">@item.Description</option>
+                        }
+                    }
+
+                </select>
+            </div>
+            @if (Model.MemberType == EnumMemberType.Contractor)
+            {
+                <div class="form-group">
+                    <label asp-for="Date_StartTerm" class="control-label"></label>
+                    <input asp-for="Date_StartTerm" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                    <span class="text-danger"><span id="spanStartDate" style="display:none;">Start Date cannot be empty</span></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Date_EndTerm" class="control-label"></label>
+                    <input asp-for="Date_EndTerm" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                    <span class="text-danger"><span id="spanEndDate" style="display:none;">End Date cannot be empty</span></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label>Employee Role</label>
+                    <select class="custom-select" name="RoleId" id="RoleId">
+                        @foreach (var item in ViewBag.RoleList)
+                        {
+                            if (Model.Role.Id == item.Id)
+                            {
+                                <option selected="selected" value="@item.Id">@item.Description</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Id">@item.Description</option>
+                            }
+                        }
+                    </select>
+                    <span class="text-danger"><span id="spanRole" style="display:none;">Please, select the member role</span></span>
+                </div>
+            }
+            <input asp-for="Id" hidden />
+            @if (Model.listTags.Count > 0)
+            {
+                    var ary = string.Join(",", Model.listTags.Select(v => v.Id.ToString()).ToArray());
+                    <input id="listTagsLoaded" value="@ary" hidden />
+            }
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="btn btn-link" asp-action="ListMembers" asp-controller="Member">Back to List of Members</a>
+</div>
