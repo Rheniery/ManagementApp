@@ -59,7 +59,7 @@ namespace ServicesTests
         {
             var member = new Member()
             {
-                Name = "Codelitt",
+                Name = "Company",
                 MemberType = EnumMemberType.Contractor,
                 Date_Register = DateTime.Now,
                 Role = null,
@@ -103,7 +103,7 @@ namespace ServicesTests
             var member = MountMemberContractor();
             Assert.IsTrue(serviceMember.Save(member));
 
-            var memberCreated = serviceMember.Consult("Codelitt");
+            var memberCreated = serviceMember.Consult("Company");
             Assert.IsTrue(memberCreated.Count > 0);
         }
 
